@@ -1,0 +1,12 @@
+version: '3' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  database: # name of the third service
+    image: postgres # specify image to build container from
+    ports:
+      - "5432:5432"  #specify port forewarding
+    volumes:
+      - postgres:/data/postgres  
+volumes:
+  postgres: 
