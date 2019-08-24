@@ -49,7 +49,9 @@ class ForgotPasswordController {
 
             const {token, password} = request.all()
 
-            const user = await User.findByOrFail('token', token)
+            const user = await User.findBy('token', token)
+
+            if(!user) throw new APIException('User não encontrado', 'USER_NOT_FOUND', 404)
 
             const token_expired = moment().subtract('2',  'days').isAfter(user.token_created_at)
 
@@ -64,8 +66,9 @@ class ForgotPasswordController {
             await user.save()
             
         } catch (error) {
-            return response.status(error.status).send({
-                message : 'Algo deu errado ao recuperar usa senha'
+            return response.status(error.status || 500).send({
+                message : error.message,
+                code : error.code || 'SERVER_ERROR'
             })
         }
     }

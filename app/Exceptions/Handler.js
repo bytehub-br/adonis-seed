@@ -52,9 +52,10 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async report (error, { request }) {
-    //console.log(error)
-    Sentry.init(Config.get('sentry'));
-    Sentry.captureException(error);
+    if(Env.get('NODE_ENV') === 'production'){
+      Sentry.init(Config.get('sentry'));
+      Sentry.captureException(error);
+    }
   }
 }
 
