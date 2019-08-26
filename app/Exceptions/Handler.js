@@ -3,10 +3,8 @@
 const BaseExceptionHandler = use('BaseExceptionHandler')
 const Env = use('Env')
 const Youch = use('Youch')
-const Sentry = require('@sentry/node');
+const Sentry = require('@sentry/node')
 const Config = use('Config')
-
-
 /**
  * This class handles all exceptions thrown during
  * the HTTP request lifecycle.
@@ -26,11 +24,11 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async handle (error, { request, response }) {
-    if(error.name === 'ValidationException'){
+    if (error.name === 'ValidationException') {
       return response.status(error.status).send(error.messages)
     }
 
-    if(Env.get('NODE_ENV') === 'development'){
+    if (Env.get('NODE_ENV') === 'development') {
       const youch = new Youch(error, request.request)
       const errorJSON = await youch.toJSON()
 
@@ -38,7 +36,7 @@ class ExceptionHandler extends BaseExceptionHandler {
     }
 
     return response.status(error.status)
-    
+
   }
 
   /**
@@ -52,9 +50,9 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async report (error, { request }) {
-    if(Env.get('NODE_ENV') === 'production'){
-      Sentry.init(Config.get('sentry'));
-      Sentry.captureException(error);
+    if (Env.get('NODE_ENV') === 'production') {
+      Sentry.init(Config.get('sentry'))
+      Sentry.captureException(error)
     }
   }
 }

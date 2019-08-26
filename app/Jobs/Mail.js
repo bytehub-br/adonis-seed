@@ -3,7 +3,6 @@
 const Env = use('Env')
 const Email = use('Mail')
 
-
 class Mail {
   // If this getter isn't provided, it will default to 1.
   // Increase this number to increase processing concurrency.
@@ -17,25 +16,23 @@ class Mail {
   }
 
   // This is where the work is done.
-  async handle ({template, data, from, from_alias, to, subject}) {
+  async handle ({ template, data, from, fromAlias, to, subject }) {
     console.log(`Job: ${Mail.key}`)
     try {
-      
+
       await Email.send(
         [template],
         data,
         message => {
-            message.to(to)
-            .from(from, from_alias)
+          message.to(to)
+            .from(from, fromAlias)
             .subject(subject)
         }
-    )
+      )
     } catch (error) {
-      console.log(error) 
+      console.log(error)
     }
-    
   }
 }
 
 module.exports = Mail
-
